@@ -7,6 +7,8 @@ import { Model } from '../model';
   styleUrls: ['./todo.component.css']
 })
 export class TodoComponent {
+
+  displayAll: boolean = false;
   constructor() { }
 
   message = "";
@@ -15,7 +17,7 @@ export class TodoComponent {
 
   addItem(value: string) {
     if (value != "") {
-    this.model.items.push({ description: value, action: "no" });
+    this.model.items.push({ description: value, action: false });
     } else {
       alert("Değer giriniz.");
     }
@@ -27,7 +29,10 @@ export class TodoComponent {
   }
 
   getItems() {
-    return this.model.items;
+    if (this.displayAll) {
+      return this.model.items;
+    }
+    return this.model.items.filter(item => !item.action);
   }
 
 }

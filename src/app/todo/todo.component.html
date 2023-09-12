@@ -8,17 +8,20 @@
                 <input #txtItem type="text" class="form-control" placeholder="Yapılacak işi giriniz..." (keyup.enter)="addItem(txtItem.value)">
                 <button class="btn btn-outline-secondary" (click)="addItem(txtItem.value); txtItem.value=''">Ekle</button>
             </div>
-            {{message}}
+            
             <div class="form-check mb-3">
-                <input type="checkbox" class="form-check-input" name="" id="displayAll">
+                <input type="checkbox" [(ngModel)]="displayAll" class="form-check-input" name="" id="displayAll">
                 <label for="displayAll" class="form-check-label">Tümünü göster</label>
             </div>
-            <table class="table table-bordered">
+
+            <table class="table table-bordered" >
                 <thead>
                     <tr>
                         <th>Yapıldı</th>
                         <th>Yapılacak</th>
                         <th>İşlem</th>
+                        <th>Yapıldı mı</th>
+                        <th>Yapıldıysa işaretle</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,9 +29,19 @@
                         <td>{{ i+1 }}</td>
                         <td>{{item.description}}</td>
                         <td>{{item.action}}</td>
+                        <td>
+                            <div [ngSwitch]="item.action">
+                                <div *ngSwitchCase="true">Yes</div>
+                                <div *ngSwitchCase="false">No</div>
+                            </div>
+                        <td>
+                            <input type="checkbox" [(ngModel)]="item.action" name="" id="">
+                        </td>
                     </tr>
                 </tbody>
             </table>
+        <div class="alert alert-warning" *ngIf="getItems().length == 0">
+           Listede eleman yok.
         </div>
     </div>
 </div>
