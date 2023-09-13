@@ -5,15 +5,29 @@
                 {{getname()}} listesi
             </h3>
             <div class="input-group mb-3">
-                <input #txtItem type="text" class="form-control" placeholder="Yapılacak işi giriniz..." (keyup.enter)="addItem(txtItem.value)">
-                <button class="btn btn-outline-secondary" (click)="addItem(txtItem.value); txtItem.value=''">Ekle</button>
+                <input type="text" class="form-control"
+                [(ngModel)]="inputText"
+                 placeholder="Yapılacak işi giriniz..." 
+                 (keyup.enter)="addItem();">
+                <button [class]="getBtnClasses()"
+                class="btn" (click)="addItem();">Ekle</button>
             </div>
             
             <div class="form-check mb-3">
                 <input type="checkbox" [(ngModel)]="displayAll" class="form-check-input" name="" id="displayAll">
                 <label for="displayAll" class="form-check-label">Tümünü göster</label>
             </div>
+            <div>
+                {{ displayCount() }} görev tamamlandı.
+                {{ remainingCount() }} görev kaldı.
 
+
+            </div>
+            <div class="alert alert-warning" *ngIf="getItems().length == 0 else itemsTable">
+                Tüm görevler tamamlandı. Bravo!!!
+             </div>
+
+            <ng-template #itemsTable>
             <table class="table table-bordered" >
                 <thead>
                     <tr>
@@ -25,23 +39,48 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of getItems(); let i = index;">
+                    <tr *ngFor="let item of getItems(); let i = index;" [class]= "{'bg-primary':item.action, 'bg-warning':!item.action}">
                         <td>{{ i+1 }}</td>
                         <td>{{item.description}}</td>
                         <td>{{item.action}}</td>
                         <td>
-                            <div [ngSwitch]="item.action">
+                            <!-- if bloğu -->
+                            <!-- <div *ngIf="item.action">Yes</div>
+                            <div *ngIf="!item.action">No</div> -->
+                            <!-- <div [ngSwitch]="item.action">
                                 <div *ngSwitchCase="true">Yes</div>
                                 <div *ngSwitchCase="false">No</div>
+                            </div> -->
+                            <!-- if else bloğu -->
+                            <!-- <div *ngIf="item.action; else noTemplete">
+                                Yes
                             </div>
+                            <ng-template #noTemplete>
+                                No
+                            </ng-template> -->
+                            <!-- if then bloğu -->
+                             <!-- <div *ngIf="item.action; then noTemplete">
+                                Burası gösterilmez
+                            </div>
+                            <ng-template #noTemplete>
+                                No
+                            </ng-template> -->
+                            <div *ngIf="item.action; then yesTemplete; else noTemplete ">
+                                Burası gösterilmez
+                            </div>
+                            <ng-template #yesTemplete>
+                                Yes
+                            </ng-template>
+                            <ng-template #noTemplete>
+                                No
+                            </ng-template>
+                        </td>
                         <td>
-                            <input type="checkbox" [(ngModel)]="item.action" name="" id="">
+                            <input type="checkbox" (change)="onActionChanged(item)" [(ngModel)]="item.action" name="" id="">
                         </td>
                     </tr>
                 </tbody>
             </table>
-        <div class="alert alert-warning" *ngIf="getItems().length == 0">
-           Listede eleman yok.
-        </div>
+        </ng-template>
     </div>
 </div>
