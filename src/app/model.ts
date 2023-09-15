@@ -10,7 +10,7 @@ export class Model {
         this.items = [
             { description: 'kahvaltı', action: true },
             { description: 'spor', action: true },
-            { description: 'ponçik', action: false },
+            { description: 'iş', action: false },
         ];
     }
 
